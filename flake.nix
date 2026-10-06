@@ -18,7 +18,8 @@
             # Rust toolchain
             rustc
             cargo
-
+            openssl
+            pkg-config
             # Python for preprocessing the OpenAPI document
             python3
             python3Packages.pyyaml

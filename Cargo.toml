@@ -1,9 +1,9 @@
 [package]
-name = "openapi"
-version = "1.0.0-draft"
+name = "prusalink"
+version = "0.1.0-draft"
 authors = ["link@prusa3d.cz"]
 description = "This is a printer webservice.  This OpenAPI document is normalized for Progenitor/Rust client generation."
-license = "AGPLv3"
+license = "MIT"
 edition = "2021"
 
 [dependencies]
@@ -11,9 +11,14 @@ serde = { version = "^1.0", features = ["derive"] }
 serde_json = "^1.0"
 serde_repr = "^0.1"
 url = "^2.5"
-tokio = { version = "^1.46.0", features = ["fs"] }
+tokio = { version = "^1.46.0", features = ["full"] }
 tokio-util = { version = "^0.7", features = ["codec"] }
 reqwest = { version = "^0.13", default-features = false, features = ["json", "multipart", "stream", "query", "form"] }
+thiserror = "2.0.21"
+futures-core = "0.3.34"
+bytes = "1.12.1"
+rust-ini = "0.21.3"
+walkdir = "2.5.0"
 
 [features]
 default = ["native-tls"]
