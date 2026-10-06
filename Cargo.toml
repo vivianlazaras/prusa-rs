@@ -15,8 +15,6 @@ tokio = { version = "^1.46.0", features = ["full"] }
 tokio-util = { version = "^0.7", features = ["codec"] }
 reqwest = { version = "^0.13", default-features = false, features = ["json", "multipart", "stream", "query", "form"] }
 thiserror = "2.0.21"
-futures-core = "0.3.34"
-bytes = "1.12.1"
 rust-ini = "0.21.3"
 walkdir = "2.5.0"
 
