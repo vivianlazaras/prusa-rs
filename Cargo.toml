@@ -1,8 +1,8 @@
 [package]
-name = "prusalink"
+name = "prusa-rs"
 version = "0.1.0-draft"
-authors = ["link@prusa3d.cz"]
-description = "This is a printer webservice.  This OpenAPI document is normalized for Progenitor/Rust client generation."
+authors = ["link@prusa3d.cz", "vivianlazaras@gmail.com"]
+description = "This is a printer webservice, and settings management crate"
 license = "MIT"
 edition = "2021"
 

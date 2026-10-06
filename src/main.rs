@@ -1,6 +1,6 @@
 #[macro_use]
 extern crate tokio;
-use prusalink::settings::{PrusaIni, printers::PrinterModel};
+use prusa_rs::settings::{PrusaIni, printers::PrinterModel, filaments::Filament};
 
 #[tokio::main]
 async fn main() {
@@ -14,8 +14,13 @@ async fn main() {
             println!("\t version: {}", version);
             for section in sections.sections.into_iter() {
                 //println!("\t\t section kind: {}, id: {:?}", section.kind, section.id);
-                if section.kind == "printer_model" {
+                let kind = section.kind.clone();
+                if kind == "printer_model" {
                     let model = PrinterModel::from_ini_section(section).unwrap();
+                    println!("model: {:?}", model);
+                }
+                else if kind == "filament" {
+                    let model = Filament::from_ini_section(section).unwrap();
                     println!("model: {:?}", model);
                 }
             }

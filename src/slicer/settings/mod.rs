@@ -1,4 +1,5 @@
 pub mod printers;
+pub mod filaments;
 use ini::Ini;
 use std::{
     collections::HashMap,
@@ -18,6 +19,14 @@ pub enum ParserError {
     MissingField(String),
     #[error("invalid value for field: {0} value: {1}")]
     InvalidField(String, String),
+    #[error("some other error: {0}")]
+    Other(String),
+}
+
+impl From<std::string::String> for ParserError {
+    fn from(val: String) -> ParserError {
+        ParserError::Other(val)
+    }
 }
 
 #[derive(Debug)]

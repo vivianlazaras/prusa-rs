@@ -7,8 +7,10 @@ extern crate serde_json;
 extern crate url;
 extern crate reqwest;
 
+pub use slicer::settings;
+
 pub mod api;
-pub mod settings;
+pub mod slicer;
 
 pub mod apis;
 pub mod models;

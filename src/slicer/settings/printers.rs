@@ -8,20 +8,20 @@ pub enum Technology {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PrinterModel {
-    name: String,
-    variants: Vec<String>,
+    pub name: String,
+    pub variants: Vec<String>,
     /// probably should be an enum appears as FFF
-    technology: Option<String>,
+    pub technology: Option<String>,
     /// examples MK4
-    family: Option<String>,
+    pub family: Option<String>,
     /// may alternatively be local path buf
-    bed_model: Option<String>,
+    pub bed_model: Option<String>,
     /// may alternatively be best as a PathBuf
-    bed_texture: Option<String>,
+    pub bed_texture: Option<String>,
     /// used when selecting a printer
-    thumbnail: Option<String>,
+    pub thumbnail: Option<String>,
     /// will correct later for proper formating.
-    default_materials: Vec<String>,
+    pub default_materials: Vec<String>,
 }
 
 impl PrinterModel {
