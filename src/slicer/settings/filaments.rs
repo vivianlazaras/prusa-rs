@@ -126,6 +126,37 @@ pub enum FilamentType {
     Other(String),
 }
 
+impl fmt::Display for FilamentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::ABS => write!(f, "ABS"),
+            Self::ASA => write!(f, "ASA"),
+            Self::CPE => write!(f, "CPE"),
+            Self::EDGE => write!(f, "EDGE"),
+            Self::FLEX => write!(f, "FLEX"),
+            Self::HIPS => write!(f, "HIPS"),
+            Self::NGEN => write!(f, "nGen"),
+            Self::Nylon => write!(f, "Nylon"),
+            Self::PA => write!(f, "PA"),
+            Self::PEBA => write!(f, "PEBA"),
+            Self::PC => write!(f, "PC"),
+            Self::PET => write!(f, "PET"),
+            Self::PETG => write!(f, "PETG"),
+            Self::PLATough => write!(f, "PLA Tough"),
+            Self::PCTG => write!(f, "PCTG"),
+            Self::PP => write!(f, "PP"),
+            Self::PVA => write!(f, "PVA"),
+            Self::PVB => write!(f, "PVB"),
+            Self::PLA => write!(f, "PLA"),
+            Self::TPU => write!(f, "TPU"),
+            Self::PEI => write!(f, "PEI"),
+            Self::Metal => write!(f, "Metal"),
+            Self::Glaze => write!(f, "Glaze"),
+            Self::Other(value) => write!(f, "{value}"),
+        }
+    }
+}
+
 impl FromStr for FilamentType {
     type Err = ();
 
