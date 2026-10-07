@@ -7,8 +7,23 @@ use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tuple<T: FromStr> {
-    left: T,
-    right: Option<T>,
+    pub left: T,
+    pub right: Option<T>,
+}
+
+impl<T> fmt::Display for Tuple<T>
+where
+    T: FromStr + fmt::Display,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.left)?;
+
+        if let Some(right) = &self.right {
+            write!(f, ",{}", right)?;
+        }
+
+        Ok(())
+    }
 }
 
 impl<T> FromStr for Tuple<T>
