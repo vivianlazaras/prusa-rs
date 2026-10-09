@@ -7,7 +7,17 @@ use serde::de::DeserializeOwned;
 use std::collections::HashMap;
 use tokio::io::AsyncRead;
 use tokio_util::codec::{BytesCodec, FramedRead};
+use serde::{Serialize, Deserialize};
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClientConfig {
+    server: String,
+    prefix: Option<String>,
+    api_key: String,
+    user_agent: Option<String>,
+}
+
+#[derive(Debug, Clone)]
 pub struct ApiClient {
     base_path: String,
     client: reqwest::Client,
@@ -16,6 +26,18 @@ pub struct ApiClient {
 }
 
 impl ApiClient {
+    pub fn new(config: ClientConfig) -> Self {
+        let key = ApiKey {
+            prefix: config.prefix,
+            key: config.api_key,
+        };
+        Self {
+            base_path: config.server,
+            api_key: key,
+            user_agent: config.user_agent,
+            client: reqwest::Client::new(),
+        }
+    }
     pub fn base_path(&self) -> &str {
         &self.base_path
     }
