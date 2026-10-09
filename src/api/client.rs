@@ -11,10 +11,10 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClientConfig {
-    server: String,
-    prefix: Option<String>,
-    api_key: String,
-    user_agent: Option<String>,
+    pub server: String,
+    pub prefix: Option<String>,
+    pub api_key: String,
+    pub user_agent: Option<String>,
 }
 
 #[derive(Debug, Clone)]
