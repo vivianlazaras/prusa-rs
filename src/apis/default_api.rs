@@ -9,7 +9,8 @@
  */
 
 
-use reqwest;
+use webreq;
+use webreq::WebClient;
 use serde::{Deserialize, Serialize, de::Error as _};
 use crate::{apis::ResponseContent, models};
 use super::{Error, configuration, ContentType};
@@ -320,15 +321,15 @@ pub enum UploadFileError {
 
 
 /// Can be manually done only during camera initialization or in manual mode
-pub async fn capture_camera_snapshot(configuration: &configuration::Configuration, id: &str) -> Result<reqwest::Response, Error<CaptureCameraSnapshotError>> {
+pub async fn capture_camera_snapshot(configuration: &configuration::Configuration, id: &str) -> Result<webreq::Response, Error<CaptureCameraSnapshotError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/cameras/{id}/snap", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::POST, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -351,10 +352,10 @@ pub async fn configure_camera(configuration: &configuration::Configuration, id: 
     let p_body_camera_config_set = camera_config_set;
 
     let uri_str = format!("{}/api/v1/cameras/{id}", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::POST, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     req_builder = req_builder.json(&p_body_camera_config_set);
 
@@ -378,10 +379,10 @@ pub async fn continue_job(configuration: &configuration::Configuration, id: i32)
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/job/{id}/continue", configuration.base_path, id=p_path_id);
-    let mut req_builder = configuration.client.request(reqwest::Method::PUT, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::PUT, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -403,10 +404,10 @@ pub async fn delete_camera(configuration: &configuration::Configuration, id: &st
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/cameras/{id}", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::DELETE, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::DELETE, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -432,10 +433,10 @@ pub async fn delete_file(configuration: &configuration::Configuration, storage: 
     let p_header_force = force;
 
     let uri_str = format!("{}/api/v1/files/{storage}/{path}", configuration.base_path, storage=crate::apis::urlencode(p_path_storage), path=crate::apis::urlencode(p_path_path));
-    let mut req_builder = configuration.client.request(reqwest::Method::DELETE, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::DELETE, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     if let Some(param_value) = p_header_accept_language {
         req_builder = req_builder.header("Accept-Language", param_value.to_string());
@@ -464,10 +465,10 @@ pub async fn delete_file(configuration: &configuration::Configuration, storage: 
 pub async fn get_api_version(configuration: &configuration::Configuration, ) -> Result<models::Version, Error<GetApiVersionError>> {
 
     let uri_str = format!("{}/api/version", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -500,10 +501,10 @@ pub async fn get_camera(configuration: &configuration::Configuration, id: &str) 
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/cameras/{id}", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -531,15 +532,15 @@ pub async fn get_camera(configuration: &configuration::Configuration, id: &str) 
     }
 }
 
-pub async fn get_camera_snapshot(configuration: &configuration::Configuration, id: &str) -> Result<reqwest::Response, Error<GetCameraSnapshotError>> {
+pub async fn get_camera_snapshot(configuration: &configuration::Configuration, id: &str) -> Result<webreq::Response, Error<GetCameraSnapshotError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/cameras/{id}/snap", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -556,13 +557,13 @@ pub async fn get_camera_snapshot(configuration: &configuration::Configuration, i
     }
 }
 
-pub async fn get_default_camera_snapshot(configuration: &configuration::Configuration, ) -> Result<reqwest::Response, Error<GetDefaultCameraSnapshotError>> {
+pub async fn get_default_camera_snapshot(configuration: &configuration::Configuration, ) -> Result<webreq::Response, Error<GetDefaultCameraSnapshotError>> {
 
     let uri_str = format!("{}/api/v1/cameras/snap", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -587,10 +588,10 @@ pub async fn get_file_metadata(configuration: &configuration::Configuration, sto
     let p_header_accept = accept;
 
     let uri_str = format!("{}/api/v1/files/{storage}/{path}", configuration.base_path, storage=crate::apis::urlencode(p_path_storage), path=crate::apis::urlencode(p_path_path));
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     if let Some(param_value) = p_header_accept_language {
         req_builder = req_builder.header("Accept-Language", param_value.to_string());
@@ -628,10 +629,10 @@ pub async fn get_file_metadata(configuration: &configuration::Configuration, sto
 pub async fn get_job(configuration: &configuration::Configuration, ) -> Result<models::Job, Error<GetJobError>> {
 
     let uri_str = format!("{}/api/v1/job", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -662,10 +663,10 @@ pub async fn get_job(configuration: &configuration::Configuration, ) -> Result<m
 pub async fn get_printer_info(configuration: &configuration::Configuration, ) -> Result<models::Info, Error<GetPrinterInfoError>> {
 
     let uri_str = format!("{}/api/v1/info", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -697,10 +698,10 @@ pub async fn get_printer_info(configuration: &configuration::Configuration, ) ->
 pub async fn get_printer_status(configuration: &configuration::Configuration, ) -> Result<models::GetPrinterStatus200Response, Error<GetPrinterStatusError>> {
 
     let uri_str = format!("{}/api/v1/status", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -734,10 +735,10 @@ pub async fn get_storage(configuration: &configuration::Configuration, accept_la
     let p_header_accept_language = accept_language;
 
     let uri_str = format!("{}/api/v1/storage", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     if let Some(param_value) = p_header_accept_language {
         req_builder = req_builder.header("Accept-Language", param_value.to_string());
@@ -772,10 +773,10 @@ pub async fn get_storage(configuration: &configuration::Configuration, accept_la
 pub async fn get_transfer(configuration: &configuration::Configuration, ) -> Result<models::Transfer, Error<GetTransferError>> {
 
     let uri_str = format!("{}/api/v1/transfer", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -808,10 +809,10 @@ pub async fn get_update_info(configuration: &configuration::Configuration, env: 
     let p_path_env = env;
 
     let uri_str = format!("{}/api/v1/update/{env}", configuration.base_path, env=crate::apis::urlencode(p_path_env));
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -847,10 +848,10 @@ pub async fn head_file(configuration: &configuration::Configuration, storage: &s
     let p_header_accept = accept;
 
     let uri_str = format!("{}/api/v1/files/{storage}/{path}", configuration.base_path, storage=crate::apis::urlencode(p_path_storage), path=crate::apis::urlencode(p_path_path));
-    let mut req_builder = configuration.client.request(reqwest::Method::HEAD, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::HEAD, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     if let Some(param_value) = p_header_accept_language {
         req_builder = req_builder.header("Accept-Language", param_value.to_string());
@@ -876,10 +877,10 @@ pub async fn head_file(configuration: &configuration::Configuration, storage: &s
 pub async fn list_cameras(configuration: &configuration::Configuration, ) -> Result<Vec<models::Camera>, Error<ListCamerasError>> {
 
     let uri_str = format!("{}/api/v1/cameras", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::GET, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -913,10 +914,10 @@ pub async fn pause_job(configuration: &configuration::Configuration, id: i32) ->
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/job/{id}/pause", configuration.base_path, id=p_path_id);
-    let mut req_builder = configuration.client.request(reqwest::Method::PUT, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::PUT, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -938,10 +939,10 @@ pub async fn register_camera(configuration: &configuration::Configuration, id: &
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/cameras/{id}/connection", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::POST, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -963,10 +964,10 @@ pub async fn reset_camera_config(configuration: &configuration::Configuration, i
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/cameras/{id}/config", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::DELETE, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::DELETE, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -989,10 +990,10 @@ pub async fn resume_job(configuration: &configuration::Configuration, id: i32) -
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/job/{id}/resume", configuration.base_path, id=p_path_id);
-    let mut req_builder = configuration.client.request(reqwest::Method::PUT, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::PUT, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -1014,10 +1015,10 @@ pub async fn set_camera_order(configuration: &configuration::Configuration, requ
     let p_body_request_body = request_body;
 
     let uri_str = format!("{}/api/v1/cameras", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::PUT, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::PUT, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     req_builder = req_builder.json(&p_body_request_body);
 
@@ -1044,10 +1045,10 @@ pub async fn start_print(configuration: &configuration::Configuration, storage: 
     let p_header_accept = accept;
 
     let uri_str = format!("{}/api/v1/files/{storage}/{path}", configuration.base_path, storage=crate::apis::urlencode(p_path_storage), path=crate::apis::urlencode(p_path_path));
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::POST, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     if let Some(param_value) = p_header_accept_language {
         req_builder = req_builder.header("Accept-Language", param_value.to_string());
@@ -1076,10 +1077,10 @@ pub async fn stop_job(configuration: &configuration::Configuration, id: i32) -> 
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/job/{id}", configuration.base_path, id=p_path_id);
-    let mut req_builder = configuration.client.request(reqwest::Method::DELETE, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::DELETE, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -1102,10 +1103,10 @@ pub async fn stop_transfer(configuration: &configuration::Configuration, id: i32
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/transfer/{id}", configuration.base_path, id=p_path_id);
-    let mut req_builder = configuration.client.request(reqwest::Method::DELETE, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::DELETE, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -1127,10 +1128,10 @@ pub async fn unregister_camera(configuration: &configuration::Configuration, id:
     let p_path_id = id;
 
     let uri_str = format!("{}/api/v1/cameras/{id}/connection", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::DELETE, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::DELETE, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -1153,10 +1154,10 @@ pub async fn update_camera_config(configuration: &configuration::Configuration, 
     let p_body_camera_config_set = camera_config_set;
 
     let uri_str = format!("{}/api/v1/cameras/{id}/config", configuration.base_path, id=crate::apis::urlencode(p_path_id));
-    let mut req_builder = configuration.client.request(reqwest::Method::PATCH, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::PATCH, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     req_builder = req_builder.json(&p_body_camera_config_set);
 
@@ -1179,10 +1180,10 @@ pub async fn update_environment(configuration: &configuration::Configuration, en
     let p_path_env = env;
 
     let uri_str = format!("{}/api/v1/update/{env}", configuration.base_path, env=crate::apis::urlencode(p_path_env));
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::POST, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
 
     let req = req_builder.build()?;
@@ -1212,10 +1213,10 @@ pub async fn upload_file(configuration: &configuration::Configuration, storage: 
     let p_header_overwrite = overwrite;
 
     let uri_str = format!("{}/api/v1/files/{storage}/{path}", configuration.base_path, storage=crate::apis::urlencode(p_path_storage), path=crate::apis::urlencode(p_path_path));
-    let mut req_builder = configuration.client.request(reqwest::Method::PUT, &uri_str);
+    let mut req_builder = configuration.client.request(webreq::Method::PUT, &uri_str);
 
     if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        req_builder = req_builder.header(webreq::header::USER_AGENT, user_agent.clone());
     }
     if let Some(param_value) = p_header_accept_language {
         req_builder = req_builder.header("Accept-Language", param_value.to_string());
@@ -1237,7 +1238,7 @@ pub async fn upload_file(configuration: &configuration::Configuration, storage: 
     }
     let file = TokioFile::open(p_body_body).await?;
     let stream = FramedRead::new(file, BytesCodec::new());
-    req_builder = req_builder.body(reqwest::Body::wrap_stream(stream));
+    req_builder = req_builder.body(webreq::Body::wrap_stream(stream));
 
     let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;

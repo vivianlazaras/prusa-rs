@@ -3,14 +3,14 @@ use std::fmt;
 
 #[derive(Debug, Clone)]
 pub struct ResponseContent<T> {
-    pub status: reqwest::StatusCode,
+    pub status: webreq::StatusCode,
     pub content: String,
     pub entity: Option<T>,
 }
 
 #[derive(Debug)]
 pub enum Error<T> {
-    Reqwest(reqwest::Error),
+    Reqwest(webreq::Error),
     Serde(serde_json::Error),
     Io(std::io::Error),
     ResponseError(ResponseContent<T>),
@@ -39,8 +39,8 @@ impl <T: fmt::Debug> error::Error for Error<T> {
     }
 }
 
-impl <T> From<reqwest::Error> for Error<T> {
-    fn from(e: reqwest::Error) -> Self {
+impl <T> From<webreq::Error> for Error<T> {
+    fn from(e: webreq::Error) -> Self {
         Error::Reqwest(e)
     }
 }
@@ -111,6 +111,6 @@ impl From<&str> for ContentType {
     }
 }
 
-pub mod default_api;
+//pub mod default_api;
 
 pub mod configuration;

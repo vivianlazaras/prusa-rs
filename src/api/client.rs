@@ -20,7 +20,7 @@ pub struct ClientConfig {
 #[derive(Debug, Clone)]
 pub struct ApiClient {
     base_path: String,
-    client: reqwest::Client,
+    client: webreq::Client,
     api_key: ApiKey,
     user_agent: Option<String>,
 }
@@ -35,7 +35,7 @@ impl ApiClient {
             base_path: config.server,
             api_key: key,
             user_agent: config.user_agent,
-            client: reqwest::Client::new(),
+            client: webreq::Client::new(),
         }
     }
     pub fn base_path(&self) -> &str {
@@ -48,14 +48,14 @@ impl ApiClient {
 
     fn request(
         &self,
-        method: reqwest::Method,
+        method: webreq::Method,
         uri: &str,
         headers: impl IntoIterator<Item = (String, String)>,
-    ) -> reqwest::RequestBuilder {
+    ) -> webreq::RequestBuilder {
         let mut request = self.client.request(method, uri);
 
         if let Some(user_agent) = &self.user_agent {
-            request = request.header(reqwest::header::USER_AGENT, user_agent);
+            request = request.header(webreq::header::USER_AGENT, user_agent);
         }
 
         for (name, value) in headers {
@@ -67,8 +67,8 @@ impl ApiClient {
 
     async fn execute(
         &self,
-        request: reqwest::RequestBuilder,
-    ) -> Result<reqwest::Response, ApiError> {
+        request: webreq::RequestBuilder,
+    ) -> Result<webreq::Response, ApiError> {
         let response = request.send().await?;
 
         if response.status().is_success() {
@@ -84,13 +84,13 @@ impl ApiClient {
 
     async fn get<T: DeserializeOwned>(&self, uri: &str) -> Result<T, ApiError> {
         let response = self
-            .execute(self.request(reqwest::Method::GET, uri, []))
+            .execute(self.request(webreq::Method::GET, uri, []))
             .await?;
 
         let content_type = response
             .headers()
-            .get(reqwest::header::CONTENT_TYPE)
-            .and_then(|value| value.to_str().ok())
+            .get(webreq::header::CONTENT_TYPE)
+            .map(|v| v.as_str())
             .unwrap_or("application/octet-stream");
 
         match ContentType::from(content_type) {
@@ -113,7 +113,7 @@ impl ApiClient {
         uri: &str,
         headers: HashMap<String, String>,
     ) -> Result<(), ApiError> {
-        self.execute(self.request(reqwest::Method::PUT, uri, headers))
+        self.execute(self.request(webreq::Method::PUT, uri, headers))
             .await?;
 
         Ok(())
@@ -124,12 +124,13 @@ impl ApiClient {
         uri: &str,
         headers: HashMap<String, String>,
     ) -> Result<(), ApiError> {
-        self.execute(self.request(reqwest::Method::DELETE, uri, headers))
+        self.execute(self.request(webreq::Method::DELETE, uri, headers))
             .await?;
 
         Ok(())
     }
 
+    /*
     async fn put_with_body<R>(
         &self,
         uri: &str,
@@ -142,13 +143,13 @@ impl ApiClient {
         let stream = FramedRead::new(body, BytesCodec::new());
 
         let request = self
-            .request(reqwest::Method::PUT, uri, headers)
-            .body(reqwest::Body::wrap_stream(stream));
+            .request(webreq::Method::PUT, uri, headers)
+            .body(webreq::Body::wrap_stream(stream));
 
         self.execute(request).await?;
 
         Ok(())
-    }
+    }*/
 
     // -------------------------------------------------------------------------
     // Get methods
@@ -220,7 +221,7 @@ impl ApiClient {
     // -------------------------------------------------------------------------
     // File operations
     // -------------------------------------------------------------------------
-
+    /*
     pub async fn upload_file<R: AsyncRead + Send + 'static>(
         &self,
         storage: &str,
@@ -254,7 +255,7 @@ impl ApiClient {
         insert_header(&mut headers, "Overwrite", overwrite);
 
         self.put_with_body(&uri, headers, body).await
-    }
+    }*/
 
     pub async fn pause_job(&self, id: i32) -> Result<(), ApiError> {
         self.put(
