@@ -16,7 +16,7 @@ tokio-util = { version = "^0.7", features = ["codec"] }
 thiserror = "2.0.21"
 rust-ini = "0.21.3"
 walkdir = "2.5.0"
-webreq = { path = "../webreq" }
+webreq = { git = "https://github.com/vivianlazaras/webreq" }
 tokio = { version = "1.54.1", features = ["rt", "io-util", "macros"]}
 
 [features]
